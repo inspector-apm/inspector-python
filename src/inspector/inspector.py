@@ -1,10 +1,16 @@
+from __future__ import annotations
 from . import Configuration
+from src.inspector.models.enums import TransportType
+
+
+# import http.client
+# import multiprocessing
 
 
 class Inspector:
     # Agent configuration.
     # type: Configuration
-    _configuration = None
+    _configuration: Configuration = None
 
     # Transport strategy.
     # type:
@@ -19,7 +25,7 @@ class Inspector:
     _beforeCallbacks = []
 
     def __init__(self, configuration: Configuration):
-        if configuration.get_transport() == 'async':
+        if configuration.get_transport() == TransportType.ASYNC:
             # self._transport = AsyncTransport(configuration)
             pass
         else:
@@ -32,26 +38,42 @@ class Inspector:
     def start_transaction(self, name):
         pass
 
-    def currentTransaction(self):
-        pass
+    # Get current transaction instance.
+    # return null|Transaction
+    def current_transaction(self):
+        return self._transport
 
+    # Determine if an active transaction exists.
+    # return: bool
     def has_transaction(self) -> bool:
-        return False
+        return True if self._transaction else False
 
+    # Determine if the current cycle hasn't started its transaction yet.
+    # return: bool
     def need_transaction(self) -> bool:
-        return False
+        return self.is_recording() and not self.has_transaction()
 
+    # Determine if a new segment can be added.
+    # return: bool
     def can_add_segments(self) -> bool:
-        return False
+        return self.is_recording() and self.has_transaction()
 
+    # Check if the monitoring is enabled.
+    # return: bool
     def is_recording(self) -> bool:
-        return False
+        return self._configuration.is_enabled()
 
-    def start_recording(self):
-        pass
+    # Enable recording.
+    # return: Inspector
+    def start_recording(self) -> Inspector:
+        self._configuration.set_enabled(True)
+        return self
 
-    def stop_recording(self):
-        pass
+    # Disable recording.
+    # return: Inspector
+    def stop_recording(self) -> Inspector:
+        self._configuration.set_enabled(False)
+        return self
 
     def start_segment(self, type, label=None):
         pass
