@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import platform
+from src.inspector.models.enums import TransportType
 
 
 class Configuration:
@@ -19,8 +20,8 @@ class Configuration:
     # type: int
     _max_items = 100
 
-    # type: str
-    _transport = 'async'
+    # type: TransportType
+    _transport: TransportType = 'async'
 
     # type: int
     _server_sampling_ratio = 0
@@ -67,7 +68,7 @@ class Configuration:
     # Value max size of a POST request content for Windows.
     # return: int
     def get_max_post_size(self) -> int:
-        return self.__post_size_windows if platform.system() is 'Windows' else self.__post_size_linux
+        return self.__post_size_windows if platform.system() == 'Windows' else self.__post_size_linux
 
     # Max numbers of items to collect in a single session.
     # return: int
@@ -137,13 +138,12 @@ class Configuration:
 
     # Set the preferred transport method.
     # param: transport
-    # type: str
+    # type: TransportType
     # return: Configuration
     # raise: ValueError
-    def set_transport(self, transport: str) -> Configuration:
-        transport = transport.strip()
-        if not transport:
-            raise ValueError('Transport cannot be empty')
+    def set_transport(self, transport: TransportType) -> Configuration:
+        if transport not in TransportType._value2member_map_:
+            raise ValueError('Transport value not valid')
         self._transport = transport
         return self
 
@@ -174,7 +174,12 @@ class Configuration:
 
     # Check if data transfer is enabled.
     # return: bool
-    def get_enabled(self) -> bool:
+    def is_enabled(self) -> bool:
         if self._ingestion_key and self._enabled:
             return True
         return False
+
+    # Return data transfer
+    # return: bool
+    def get_enabled(self) -> bool:
+        return self._enabled
