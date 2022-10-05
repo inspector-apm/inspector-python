@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='inspector',
+    name='inspector-python',
     version='0.1.0',
     extras_require=dict(tests=['pytest']),
     packages=find_packages(where="src"),
