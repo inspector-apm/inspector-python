@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from src.inspector.models.enums import TransportType
 import platform
 from src.inspector.models.enums import TransportType
 
@@ -7,7 +7,7 @@ from src.inspector.models.enums import TransportType
 class Configuration:
     # Remote endpoint to send data.
     # type: str
-    _url = "https://ingest.inspector.dev"
+    _url = "ingest.inspector.dev"
 
     # Authentication key.
     # type: str
@@ -21,13 +21,13 @@ class Configuration:
     _max_items = 100
 
     # type: TransportType
-    _transport: TransportType = 'async'
+    _transport: TransportType = TransportType.ASYNC
 
     # type: int
     _server_sampling_ratio = 0
 
     # type: str
-    _version = '3.7.15'
+    _version = '3.7.16'
 
     # type: list
     _options = []

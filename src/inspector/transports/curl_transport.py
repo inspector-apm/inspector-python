@@ -1,22 +1,27 @@
 from src.inspector.transports import Transport
-from abc import ABC, abstractmethod
 from src.inspector import Configuration
 import http.client
 import ssl
-import time
 
 
 class CurlTransport(Transport):
-    PORT = 80
+    PORT = 443
     TIMEOUT = 10
 
     def __init__(self, configuration: Configuration):
-        Transport.__init__(configuration)
+        Transport.__init__(self, configuration)
 
-    def send_chunk(self, data):
+    def _send_chunk(self, message_bytes):
         headers = self._get_api_headers()
-        connection = http.client.HTTPSConnection(self._config.get_url(), self.PORT, timeout=self.TIMEOUT,
-                                                 context=ssl._create_unverified_context())
-        connection.request('POST', "/", data, headers)
-        response = connection.getresponse()
-        print(response.read().decode())
+        try:
+            print('message_bytes: ', message_bytes)
+            # http.client.HTTPSConnection.debuglevel = 1
+            connection = http.client.HTTPSConnection(self._config.get_url(), self.PORT, timeout=self.TIMEOUT,
+                                                     context=ssl._create_unverified_context())
+            connection.request("POST", "", message_bytes, headers)
+            response = connection.getresponse()
+            print(response.status, response.reason)
+            print(response.read().decode())
+            connection.close()
+        except Exception as e:
+            print('ERROR: ', str(e))

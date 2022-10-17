@@ -1,9 +1,11 @@
 from __future__ import annotations
 from typing import Union, Any
-
+import json
+import time
+from abc import abstractmethod
 
 class HasContext:
-    _context: Union[None, list] = None
+    _context: Union[None, dict] = {}
 
     # Add contextual information.
     # param: label
@@ -17,9 +19,9 @@ class HasContext:
 
     # Set contextual information.
     # param: context
-    # type: list
+    # type: dict
     # return: HasContext
-    def set_context(self, context: list) -> HasContext:
+    def set_context(self, context: dict) -> HasContext:
         self._context = context
         return self
 
@@ -34,3 +36,16 @@ class HasContext:
             else:
                 return None
         return self._context
+
+    # Convert the object to json recursively
+    # return: str
+    @abstractmethod
+    def get_json(self) -> str:
+        print('DICT SELF HAS_CONTEXT: ', self.__dict__)
+        return json.loads(
+            json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
+        )
+
+    def get_microtime(self):
+        time_value = float(time.time() / 1000)
+        return (round(time_value, 4))

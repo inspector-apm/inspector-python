@@ -1,5 +1,6 @@
 from src.inspector.models import Arrayable
 from typing import Union
+import psutil
 
 
 class HOST(Arrayable):
@@ -7,9 +8,14 @@ class HOST(Arrayable):
     ip: Union[str, None] = None
     os: Union[str, None] = None
     url: Union[str, None] = None
-    cpu: Union[str, None] = None
-    ram: Union[str, None] = None
+    cpu: Union[float, None] = None
+    ram: Union[float, None] = None
     hdd: Union[str, None] = None
+
+    def with_server_status(self):
+        self.set_cpu(psutil.cpu_percent())
+        ram = psutil.virtual_memory().percent
+        self.set_ram(ram)
 
     def set_hostname(self, hostname: str) -> None:
         self.hostname = hostname
@@ -20,10 +26,10 @@ class HOST(Arrayable):
     def set_os(self, os: str) -> None:
         self.os = os
 
-    def set_cpu(self, cpu: str) -> None:
+    def set_cpu(self, cpu: float) -> None:
         self.cpu = cpu
 
-    def set_ram(self, ram: str) -> None:
+    def set_ram(self, ram: float) -> None:
         self.ram = ram
 
     def set_hdd(self, hdd: str) -> None:
@@ -35,10 +41,10 @@ class HOST(Arrayable):
     def get_url(self) -> str:
         return self.url
 
-    def get_cpu(self) -> str:
+    def get_cpu(self) -> float:
         return self.cpu
 
-    def get_ram(self) -> str:
+    def get_ram(self) -> float:
         return self.ram
 
     def get_hdd(self) -> str:

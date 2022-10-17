@@ -1,22 +1,24 @@
 from __future__ import annotations
 from abc import abstractmethod
-import time
 from typing import Union
 from src.inspector.models import HasContext
 
 
 class Performance(HasContext):
-    _timestamp: Union[None, float] = None
-    _duration: Union[None, float] = None
+    timestamp = 0
+    duration = 0
+
+    def __init__(self):
+        self.duration = 0
+        self.duration = 0
 
     # Start the timer.
     # type: None|float
     # param: timestamp
     # return: Performance
     @abstractmethod
-    def start(self, timestamp: Union[None, float] = None) -> Performance:
-        self._timestamp = timestamp if timestamp else round(time.time() * 1000)
-        print('\n\nself._timestamp: ', self._timestamp)
+    def start(self, timestamp=None) -> Performance:
+        self.timestamp = timestamp if timestamp is not None else self.get_microtime()
         return self
 
     # Stop the timer and calculate duration.
@@ -24,16 +26,16 @@ class Performance(HasContext):
     # param: duration
     # return: Performance
     @abstractmethod
-    def end(self, duration: Union[None, float] = None) -> Performance:
+    def end(self, duration: Union[None, float] = 0) -> Performance:
         """
-
         :type: object
         """
-        self._duration = duration if duration else (round(time.time() * 1000) - self._timestamp)
+        self.duration = duration if duration else (self.get_microtime() - self.timestamp)
+        self.duration = float(round(self.duration, 4))
         return self
 
     def get_timestamp(self):
-        return self._timestamp
+        return self.timestamp
 
     def get_duration(self):
-        return self._duration
+        return self.duration
