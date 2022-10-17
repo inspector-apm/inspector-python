@@ -26,17 +26,18 @@ def test_configuration_construction():
 
     inspector = Inspector(config)
 
-    inspector.start_transaction('path/di/invio')
+    inspector.start_transaction('path/di/invio/test')
     inspector.current_transaction().set_result('success')
     obj_test = {
         'foo': 'bar'
     }
-    inspector.current_transaction().add_context('test', obj_test)
+    # inspector.current_transaction().add_context('test', obj_test)
+    # inspector.current_transaction().add_context('test2', obj_test)
     inspector.current_transaction().end()
 
-    print("\n----------------------------------------------\n")
-    print(inspector.current_transaction().__dict__)
-    print("\n----------------------------------------------\n")
+
+    print('DEBUG: ', inspector.current_transaction().__dict__)
+
     # segment = inspector.start_segment('process', 'test segment')
     # segment.end()
 

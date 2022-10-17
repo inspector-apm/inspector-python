@@ -14,7 +14,7 @@ class CurlTransport(Transport):
     def _send_chunk(self, message_bytes):
         headers = self._get_api_headers()
         try:
-            print('message_bytes: ', message_bytes)
+            print('\n\nmessage_bytes: ', message_bytes)
             # http.client.HTTPSConnection.debuglevel = 1
             connection = http.client.HTTPSConnection(self._config.get_url(), self.PORT, timeout=self.TIMEOUT,
                                                      context=ssl._create_unverified_context())

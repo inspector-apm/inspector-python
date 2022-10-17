@@ -5,7 +5,7 @@ import time
 from abc import abstractmethod
 
 class HasContext:
-    _context: Union[None, dict] = {}
+    context: Union[None, dict] = {}
 
     # Add contextual information.
     # param: label
@@ -13,35 +13,38 @@ class HasContext:
     # param: data
     # type: Any
     # return: HasContext
+    @abstractmethod
     def add_context(self, label: Union[str, int], data: Any) -> HasContext:
-        self._context[label] = data
+        self.context[label] = data
         return self
 
     # Set contextual information.
     # param: context
     # type: dict
     # return: HasContext
+    @abstractmethod
     def set_context(self, context: dict) -> HasContext:
-        self._context = context
+        self.context = context
         return self
 
     # Get contextual information.
     # param: label
     # type: None|str|int
     # return: Any
+    @abstractmethod
     def get_context(self, label: Union[None, str, int] = None) -> Any:
         if label:
-            if label in self._context:
-                return self._context[label]
+            if label in self.context:
+                return self.context[label]
             else:
                 return None
-        return self._context
+        return self.context
 
     # Convert the object to json recursively
     # return: str
     @abstractmethod
     def get_json(self) -> str:
-        print('DICT SELF HAS_CONTEXT: ', self.__dict__)
+        print('DICT SELF HAScontext: ', self.__dict__)
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
         )

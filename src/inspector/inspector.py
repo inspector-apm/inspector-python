@@ -97,7 +97,8 @@ class Inspector:
 
     def add_entries(self, entries) -> Inspector:
         # entries = entries if type(entries) is 'dict' else [entries]
-        self._transport.add_entry(entries)
+        if isinstance(entries, Transaction):
+            self._transaction = self._transport.add_entry(entries)
         return self
 
     @staticmethod

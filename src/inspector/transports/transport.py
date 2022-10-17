@@ -37,12 +37,9 @@ class Transport(TransportInterface):
         self._config = configuration
         # $this->verifyOptions($configuration->getOptions());
 
-    def add_entry(self, item: Union[Transaction, Segment, dict]) -> TransportInterface:
-        if not isinstance(item, dict):
-            # item = item
-            item = item.get_json()
+    def add_entry(self, item: Union[Transaction, Segment, dict]):
         self._queue.append(item)
-        return self
+        return self._queue[len(self._queue) - 1]
 
     def flush(self):
         if len(self._queue) <= 0:
@@ -56,9 +53,15 @@ class Transport(TransportInterface):
             f_out.write(data)
         self._send_chunk(tmpfile)
 
+    def __get_item_json_list(self, items):
+        list_data = []
+        for item in items:
+            list_data.append(item.get_json())
+        return list_data
+
     def send(self, items):
         data = items
-        json_data_str = str(items)
+        json_data_str = str(self.__get_item_json_list(items))
         json_length = len(json_data_str)
         count = len(data)
         if json_length > self._config.get_max_post_size():

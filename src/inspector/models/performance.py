@@ -11,6 +11,7 @@ class Performance(HasContext):
     def __init__(self):
         self.duration = 0
         self.duration = 0
+        HasContext.__init__(self)
 
     # Start the timer.
     # type: None|float

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Union
+from typing import Union, Any
 from src.inspector.models import Performance
 from src.inspector.models.partials import HOST, User, HTTP, URL
 import random
@@ -25,6 +25,7 @@ class Transaction(Performance):
     memory_peak: Union[float, None] = 0
     # duration = 0
     context: list = []
+    # context: dict = {}
     cookies: list = []
     headers: list = []
 
@@ -37,6 +38,7 @@ class Transaction(Performance):
         self.type = type_str
         self.memory_peak = 0
         self.result = ''
+        self.context = []
         # self.duration = 0
         self.hash = self.__generate_unique_hash()
         if self.type == self.TYPE_REQUEST:
@@ -44,12 +46,17 @@ class Transaction(Performance):
             self.url = URL()
             self.http = HTTP()
 
+    def add_context(self, label: Union[str, int], data: Any) -> Transaction:
+        self.context[label] = data
+        print('\n\nCONTEXT: ', self.context)
+        return self
+
     def with_user(self, id: str, name: Union[str, None] = None, email: Union[str, None] = None) -> Transaction:
         self.user = User(id=id, name=name, email=email)
         return self
 
+
     def get_json(self) -> str:
-        print('\n--> DICT SELF: ', self.__dict__)
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
         )
@@ -58,8 +65,6 @@ class Transaction(Performance):
     def end(self, duration: Union[float, None] = None):
         self.memory_peak = self.get_memory_peak()
         obj = Performance.end(self, duration)
-        print('\nmemory_peak: ', self.memory_peak)
-        print('\nDENTRO END TRANSACTION: ', self.duration)
         return obj
 
     def get_memory_peak(self):
