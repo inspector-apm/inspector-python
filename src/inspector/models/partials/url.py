@@ -9,6 +9,13 @@ class URL(Arrayable):
     search: Union[str, None] = None
     full: Union[str, None] = None
 
+    def __init__(self):
+        self.protocol = ""
+        self.port = 0
+        self.path = ""
+        self.search = ""
+        self.full = ""
+
     def set_protocol(self, protocol: str) -> None:
         self.protocol = protocol
 

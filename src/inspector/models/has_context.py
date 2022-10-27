@@ -4,6 +4,7 @@ import json
 import time
 from abc import abstractmethod
 
+
 class HasContext:
     context: Union[None, dict] = {}
 
@@ -44,11 +45,10 @@ class HasContext:
     # return: str
     @abstractmethod
     def get_json(self) -> str:
-        print('DICT SELF HAScontext: ', self.__dict__)
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
         )
 
     def get_microtime(self):
-        time_value = float(time.time() / 1000)
+        time_value = float(time.time())
         return (round(time_value, 4))

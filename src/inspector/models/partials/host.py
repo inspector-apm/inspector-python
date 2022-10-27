@@ -1,7 +1,8 @@
 from src.inspector.models import Arrayable
 from typing import Union
 import psutil
-
+import socket
+import platform
 
 class HOST(Arrayable):
     hostname: Union[str, None] = None
@@ -11,6 +12,12 @@ class HOST(Arrayable):
     cpu: Union[float, None] = None
     ram: Union[float, None] = None
     hdd: Union[str, None] = None
+
+    def __init__(self):
+        self.hostname = socket.gethostname()
+        self.ip = socket.gethostbyname(socket.gethostname())
+        self.with_server_status()
+        self.set_os(platform.version())
 
     def with_server_status(self):
         self.set_cpu(psutil.cpu_percent())

@@ -8,6 +8,7 @@ from src.inspector.models.enums import TransactionType, ModelType
 import resource
 import json
 
+
 class Transaction(Performance):
     TYPE_REQUEST = TransactionType.REQUEST.value
     TYPE_PROCESS = TransactionType.PROCESS.value
@@ -18,7 +19,6 @@ class Transaction(Performance):
     hash: Union[str, None] = None
     host: Union[str, None] = None
     http: Union[str, None] = None
-    url: Union[str, None] = None
     user: Union[str, None] = None
     result: Union[str, None] = None
     user: Union[User, None] = None
@@ -30,37 +30,31 @@ class Transaction(Performance):
     headers: list = []
 
     def __init__(self, name: str, type_str: Union[str, None] = None) -> None:
-        # if type_str is not None and type_str not in TransactionType._value2member_map_:
-        #    raise ValueError('Transaction Type value not valid')
         Performance.__init__(self)
         self.model = ModelType.TRANSACTION.value
         self.name = name
         self.type = type_str
         self.memory_peak = 0
-        self.result = ''
-        self.context = []
-        # self.duration = 0
+        self.result = ""
+        self.context = {}
         self.hash = self.__generate_unique_hash()
+        # self.duration = 0
+        self.host = HOST()
         if self.type == self.TYPE_REQUEST:
-            self.host = HOST()
-            self.url = URL()
             self.http = HTTP()
 
     def add_context(self, label: Union[str, int], data: Any) -> Transaction:
         self.context[label] = data
-        print('\n\nCONTEXT: ', self.context)
         return self
 
     def with_user(self, id: str, name: Union[str, None] = None, email: Union[str, None] = None) -> Transaction:
         self.user = User(id=id, name=name, email=email)
         return self
 
-
     def get_json(self) -> str:
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
         )
-
 
     def end(self, duration: Union[float, None] = None):
         self.memory_peak = self.get_memory_peak()

@@ -6,6 +6,10 @@ class Socket(Arrayable):
     remote_address: Union[str, None] = None
     encrypted: bool = None
 
+    def __init__(self):
+        self.remote_address = ""
+        self.encrypted = False
+
     def set_remote_address(self, remote_address: str) -> None:
         self.remote_address = remote_address
 

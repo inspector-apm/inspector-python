@@ -10,6 +10,13 @@ class Request(Arrayable):
     headers: list = []
     socket: Socket = None
 
+    def __init__(self):
+        self.method = ""
+        self.version = ""
+        self.cookies = ""
+        self.headers = []
+        self.socket = Socket()
+
     def set_method(self, method: str) -> None:
         self.method = method
 

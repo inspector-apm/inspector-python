@@ -6,7 +6,7 @@ from src.inspector.models.enums import TransactionType, ModelType
 
 # import http.client
 # import multiprocessing
-from src.inspector.transports import CurlTransport
+from src.inspector.transports import SyncTransport, AsyncTransport
 
 
 class Inspector:
@@ -22,6 +22,10 @@ class Inspector:
     # type:
     _transaction = None
 
+    # Current Segment.
+    # type:
+    _segment = None
+
     # Runa callback before flushing data to the remote platform.
     # type:
     _beforeCallbacks = []
@@ -29,10 +33,10 @@ class Inspector:
     def __init__(self, configuration: Configuration):
         self._configuration = configuration
         if configuration.get_transport() == TransportType.ASYNC:
-            # self._transport = AsyncTransport(configuration)
-            pass
+            self._transport = AsyncTransport(configuration)
         else:
-            self._transport = CurlTransport(configuration)
+            self._transport = SyncTransport(configuration)
+            self._transport.set_format_send(False)
 
     def __del__(self):
         self.flush()
@@ -48,8 +52,13 @@ class Inspector:
 
     # Get current transaction instance.
     # return null|Transaction
-    def current_transaction(self):
+    def current_transaction(self) -> Transaction:
         return self._transaction
+
+    # Get current segment instance.
+    # return null|Segment
+    def current_segment(self) -> Segment:
+        return self._segment
 
     # Determine if an active transaction exists.
     # return: bool
@@ -84,10 +93,10 @@ class Inspector:
         return self
 
     def start_segment(self, type_str=TransactionType.PROCESS.value, label=None):
-        segment = Segment(self._transaction, type_str, label)
-        segment.start()
-        self.add_entries(segment)
-        return segment
+        self._segment = Segment(self._transaction, type_str, label)
+        self._segment.start()
+        self.add_entries(self._segment)
+        return self._segment
 
     def add_segment(self, callback, type, label=None, throw=False):
         pass
@@ -99,6 +108,8 @@ class Inspector:
         # entries = entries if type(entries) is 'dict' else [entries]
         if isinstance(entries, Transaction):
             self._transaction = self._transport.add_entry(entries)
+        elif isinstance(entries, Segment):
+            self._segment = self._transport.add_entry(entries)
         return self
 
     @staticmethod
@@ -109,8 +120,6 @@ class Inspector:
         if not self.is_recording() or not self.has_transaction():
             return
 
-        if not self._transaction.is_ended():
-            self._transaction.end()
-
         self._transport.flush()
-        # del self._transaction
+        del self._transaction
+        del self._segment

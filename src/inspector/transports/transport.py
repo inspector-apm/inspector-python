@@ -28,6 +28,8 @@ class Transport(TransportInterface):
     """
     _queue: list = []
 
+    __send_base64 = True
+
     def __init__(self, configuration: Configuration) -> None:
         """
         AbstractApiTransport constructor.
@@ -61,7 +63,9 @@ class Transport(TransportInterface):
 
     def send(self, items):
         data = items
-        json_data_str = str(self.__get_item_json_list(items))
+        # for item in data:
+        #    print('--> ITEM: ', self.__get_item_json_list(item))
+        json_data_str = json.dumps(self.__get_item_json_list(items))
         json_length = len(json_data_str)
         count = len(data)
         if json_length > self._config.get_max_post_size():
@@ -76,11 +80,15 @@ class Transport(TransportInterface):
             for chunk in chunks:
                 self.send(chunk)
         else:
-            # print('\n---> json_data_str: ', json_data_str)
             message_bytes = json_data_str.encode('ascii')
             str_base64 = base64.b64encode(message_bytes)
-            # self._send_chunk(str_base64)
-            self._send_chunk(json_data_str)
+            if self.__send_base64:
+                self._send_chunk(str_base64)
+            else:
+                self._send_chunk(json_data_str)
+
+    def set_format_send(self, base64=True):
+        self.__send_base64 = base64
 
     def _get_allowed_options(self) -> dict:
         allowed_options = {
