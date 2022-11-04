@@ -52,7 +52,7 @@ class Inspector:
 
     # Get current transaction instance.
     # return null|Transaction
-    def current_transaction(self) -> Transaction:
+    def transaction(self) -> Transaction:
         return self._transaction
 
     # Get current segment instance.
@@ -98,10 +98,29 @@ class Inspector:
         self.add_entries(self._segment)
         return self._segment
 
-    def add_segment(self, callback, type, label=None, throw=False):
-        pass
+    def add_segment(self, callback, type_str, label=None, throw=False):
+        self.start_segment(type_str, label)
+        result = callback()
+        self.current_segment().end()
+        return result
 
     def report_exception(self, exception, handled=True):
+        """
+        if ($this->needTransaction()) {
+            $this->startTransaction(get_class($exception));
+        }
+
+        $segment = $this->startSegment('exception', substr($exception->getMessage(), 0, 50));
+
+        $error = (new Error($exception, $this->transaction))
+            ->setHandled($handled);
+
+        $this->addEntries($error);
+
+        $segment->addContext('Error', $error)->end();
+
+        return $error;
+        """
         pass
 
     def add_entries(self, entries) -> Inspector:
@@ -119,7 +138,7 @@ class Inspector:
     def flush(self):
         if not self.is_recording() or not self.has_transaction():
             return
-
+        self.transaction().end()
         self._transport.flush()
         del self._transaction
         del self._segment

@@ -62,7 +62,7 @@ class Transaction(Performance):
         return obj
 
     def get_memory_peak(self):
-        return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return round((resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024/1024), 2)
 
     def sample_server_status(self, ratio: float):
         pass
