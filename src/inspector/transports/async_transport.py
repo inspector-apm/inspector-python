@@ -5,6 +5,18 @@ from multiprocessing import Process, Value, Array
 import ssl
 
 
+def send_data(self, message_bytes):
+    try:
+        headers = self._get_api_headers()
+        connection = http.client.HTTPSConnection(self._config.get_url(), self.PORT, timeout=self.TIMEOUT,
+                                                 context=ssl._create_unverified_context())
+        connection.request("POST", "", message_bytes, headers)
+        response = connection.getresponse()
+        connection.close()
+    except Exception as e:
+        print('ERROR: ', str(e))
+
+
 class AsyncTransport(Transport):
     PORT = 443
     TIMEOUT = 10
@@ -13,27 +25,9 @@ class AsyncTransport(Transport):
         Transport.__init__(self, configuration)
 
     def _send_chunk(self, message_bytes):
-
         try:
-            p = Process(target=AsyncTransport.send_data, args=(message_bytes))
+            p = Process(target=send_data, args=(self, message_bytes))
             p.start()
-
-        except Exception as e:
-            print('ERROR: ', str(e))
-
-    @staticmethod
-    def send_data(self, message_bytes):
-        try:
-            headers = self._get_api_headers()
-
-            print("ASYNC MESSAGE: ", message_bytes, flush=True)
-            # http.client.HTTPSConnection.debuglevel = 1
-            connection = http.client.HTTPSConnection(self._config.get_url(), self.PORT, timeout=self.TIMEOUT,
-                                                     context=ssl._create_unverified_context())
-            connection.request("POST", "", message_bytes, headers)
-            response = connection.getresponse()
-            print(response.status, response.reason, flush=True)
-            print(response.read().decode(), flush=True)
-            connection.close()
+            p.join()
         except Exception as e:
             print('ERROR: ', str(e))

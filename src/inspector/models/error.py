@@ -77,8 +77,5 @@ class Error(Performance):
     def get_json(self) -> str:
         json_str = Performance.get_json(self)
         json_str['class'] = json_str['class_name']
-        print('---------------------')
-        print(json_str)
-        print('---------------------')
         del json_str['class_name']
         return json_str

@@ -38,7 +38,8 @@ class Inspector:
 
     def __init__(self, configuration: Configuration):
         self._configuration = configuration
-        if configuration.get_transport() == TransportType.ASYNC:
+        print('configuration.get_transport(): ', configuration.get_transport())
+        if configuration.get_transport() == TransportType.ASYNC.value:
             self._transport = AsyncTransport(configuration)
         else:
             self._transport = SyncTransport(configuration)
