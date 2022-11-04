@@ -46,7 +46,7 @@ class HasContext:
     @abstractmethod
     def get_json(self) -> str:
         return json.loads(
-            json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
+            json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)), indent=100)
         )
 
     def get_microtime(self):

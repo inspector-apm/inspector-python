@@ -2,7 +2,7 @@ from abc import abstractmethod
 from src.inspector import Configuration
 from typing import Union
 from src.inspector.transports import TransportInterface
-from src.inspector.models import Transaction, Segment
+from src.inspector.models import Transaction, Segment, Error
 import tempfile
 import base64
 import math
@@ -39,7 +39,7 @@ class Transport(TransportInterface):
         self._config = configuration
         # $this->verifyOptions($configuration->getOptions());
 
-    def add_entry(self, item: Union[Transaction, Segment, dict]):
+    def add_entry(self, item: Union[Transaction, Segment, Error, dict]):
         self._queue.append(item)
         return self._queue[len(self._queue) - 1]
 
@@ -76,7 +76,6 @@ class Transport(TransportInterface):
 
             chunk_size = math.floor(math.ceil(json_length / self._config.get_max_post_size()))
             chunks = list(self.array_chunks(data, chunk_size))
-            print('\n---> chunks: ', chunks)
             for chunk in chunks:
                 self.send(chunk)
         else:

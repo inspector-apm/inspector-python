@@ -1,8 +1,10 @@
 from __future__ import annotations
 from . import Configuration
 from src.inspector.models.enums import TransportType
-from src.inspector.models import Transaction, Segment
+from src.inspector.models import Transaction, Segment, Error
 from src.inspector.models.enums import TransactionType, ModelType
+import sys
+import traceback
 
 # import http.client
 # import multiprocessing
@@ -25,6 +27,10 @@ class Inspector:
     # Current Segment.
     # type:
     _segment = None
+
+    # Current Error.
+    # type:
+    _error = None
 
     # Runa callback before flushing data to the remote platform.
     # type:
@@ -57,7 +63,7 @@ class Inspector:
 
     # Get current segment instance.
     # return null|Segment
-    def current_segment(self) -> Segment:
+    def segment(self) -> Segment:
         return self._segment
 
     # Determine if an active transaction exists.
@@ -101,34 +107,27 @@ class Inspector:
     def add_segment(self, callback, type_str, label=None, throw=False):
         self.start_segment(type_str, label)
         result = callback()
-        self.current_segment().end()
+        self.segment().end()
         return result
 
     def report_exception(self, exception, handled=True):
-        """
-        if ($this->needTransaction()) {
-            $this->startTransaction(get_class($exception));
-        }
+        if self.need_transaction():
+            self.start_transaction(exception.__class__.__name__)
 
-        $segment = $this->startSegment('exception', substr($exception->getMessage(), 0, 50));
+        segment = self.start_segment(ModelType.EXCEPTION.value, str(exception))
 
-        $error = (new Error($exception, $this->transaction))
-            ->setHandled($handled);
-
-        $this->addEntries($error);
-
-        $segment->addContext('Error', $error)->end();
-
-        return $error;
-        """
-        pass
+        error = (Error(exception, self._transaction)).set_handled(handled)
+        self.add_entries(error)
+        segment.add_context('Error', error).end()
+        return error
 
     def add_entries(self, entries) -> Inspector:
-        # entries = entries if type(entries) is 'dict' else [entries]
         if isinstance(entries, Transaction):
             self._transaction = self._transport.add_entry(entries)
         elif isinstance(entries, Segment):
             self._segment = self._transport.add_entry(entries)
+        elif isinstance(entries, Error):
+            self._error = self._transport.add_entry(entries)
         return self
 
     @staticmethod

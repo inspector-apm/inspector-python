@@ -1,9 +1,11 @@
-from src.inspector.models import HasContext, Transaction
+from src.inspector.models import Performance, Transaction
 from src.inspector.models.partials import HOST
 from src.inspector.models.enums import ModelType
-import json
+import sys
+import traceback
 
-class Error(HasContext):
+
+class Error(Performance):
     model = ''
     timestamp = 0
     host = None
@@ -11,31 +13,42 @@ class Error(HasContext):
     class_name = None
     file = None
     line = None
-    code = None
+    code = 0
     stack = []
-    handled = None
+    handled = False
+    message = ''
+    __prev_number_line = 5
+    __next_number_line = 5
 
-    def __init__(self, throwable, transaction: Transaction):
-        HasContext.__init__(self)
+    def __init__(self, throwable: Exception, transaction: Transaction):
+        Performance.__init__(self)
         self.model = ModelType.ERROR.value
         self.timestamp = self.get_microtime()
         self.host = HOST()
         self.transaction = transaction
+        self.message = str(throwable)
+        self.stack = []
 
-        """
-        
-        $this->class = get_class($throwable);
-        $this->file = $throwable->getFile();
-        $this->line = $throwable->getLine();
-        $this->code = $throwable->getCode();
+        ex_type, ex_value, ex_traceback = sys.exc_info()
+        trace_back = traceback.extract_tb(ex_traceback)
 
-        $this->stack = $this->stackTraceToArray(
-            $throwable->getTrace(),
-            $throwable->getFile(),
-            $throwable->getLine()
-        );
-        
-        """
+        self.class_name = throwable.__class__.__name__
+        self.file = trace_back[0].filename
+        self.code = trace_back[0].line
+        self.line = trace_back[0].lineno
+        i = 0
+        for trace in trace_back:
+            item_stack = {
+                "class": trace.filename,
+                "function": trace.name,
+                "args": [],
+                "type": "",
+                "file": trace.filename,
+                "line": trace.lineno,
+                "code": self.get_code(trace.filename, trace.lineno)
+            }
+            self.get_code(trace.filename, trace.lineno)
+            self.stack.append(item_stack)
 
     def set_handled(self, value):
         self.handled = value
@@ -47,13 +60,25 @@ class Error(HasContext):
     def stack_trace_args_to_array(self, trace):
         pass
 
-    def get_code(self, file_path, line, lines_around=5):
-        pass
+    def get_code(self, file_path: str, line: int):
+        fp = open(file_path)
+        code = {}
+        cont = 0
+        for i, row in enumerate(fp):
+            if (line - self.__prev_number_line) <= i <= (line + self.__next_number_line):
+                item_code = {
+                    "code": row.strip("\n"),
+                    "line": i
+                }
+                code[cont] = item_code
+                cont = cont + 1
+        return code
 
     def get_json(self) -> str:
-        json_str = HasContext.get_json()
-        json_str = json_str.replace('class_name', 'class')
-        # return json_str
-        return json.loads(
-            json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
-        )
+        json_str = Performance.get_json(self)
+        json_str['class'] = json_str['class_name']
+        print('---------------------')
+        print(json_str)
+        print('---------------------')
+        del json_str['class_name']
+        return json_str
