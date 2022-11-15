@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='inspector-python',
+    description='Connect your Python applications with Inspector.',
     version='0.1.4',
     extras_require=dict(tests=['pytest']),
     packages=find_packages(where="src"),
