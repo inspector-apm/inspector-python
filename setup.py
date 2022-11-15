@@ -10,6 +10,5 @@ setup(
     url='https://inspector.dev/',
     license='MIT',
     author='Antonio Bruno',
-    author_email='antoniobruno82@gmail.com',
-    description='Connect your Python application to Inspector'
+    author_email='antoniobruno82@gmail.com'
 )
