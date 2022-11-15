@@ -4,7 +4,7 @@ from . import Performance
 from .partials import HOST, User, HTTP, URL
 import random
 import string
-from src.inspector.models.enums import TransactionType, ModelType
+from .enums import TransactionType, ModelType
 import resource
 import json
 
