@@ -1,6 +1,6 @@
 # Inspector | Code Execution Monitoring Tool
 
-Simple code execution monitoring for Python applications.
+Inspector is a Code Execution Monitoring tool to help developers find out technical problems in their software automatically, before customers do.
 
 ## Requirements
 
