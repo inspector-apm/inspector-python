@@ -1,7 +1,7 @@
 from __future__ import annotations
-from src.inspector.models.enums import TransportType
+from .models.enums import TransportType
 import platform
-from src.inspector.models.enums import TransportType
+from .models.enums import TransportType
 
 
 class Configuration:

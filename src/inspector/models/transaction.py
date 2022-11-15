@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Union, Any
-from src.inspector.models import Performance
-from src.inspector.models.partials import HOST, User, HTTP, URL
+from . import Performance
+from .partials import HOST, User, HTTP, URL
 import random
 import string
 from src.inspector.models.enums import TransactionType, ModelType

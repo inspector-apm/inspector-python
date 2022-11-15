@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import abstractmethod
 from typing import Union
-from src.inspector.models import HasContext
+from . import HasContext
 
 
 class Performance(HasContext):

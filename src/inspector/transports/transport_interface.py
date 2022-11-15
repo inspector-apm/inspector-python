@@ -1,5 +1,5 @@
 from abc import ABC
-from src.inspector.models import Arrayable
+from ..models import Arrayable
 
 
 class TransportInterface(ABC):

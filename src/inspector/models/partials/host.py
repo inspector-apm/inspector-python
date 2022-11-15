@@ -1,4 +1,4 @@
-from src.inspector.models import Arrayable
+from .. import Arrayable
 from typing import Union
 import psutil
 import socket

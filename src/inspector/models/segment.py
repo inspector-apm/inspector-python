@@ -1,6 +1,6 @@
 from __future__ import annotations
-from src.inspector.models import Performance
-from src.inspector.models.enums import ModelType
+from . import Performance
+from .enums import ModelType
 from typing import Union, Any
 
 

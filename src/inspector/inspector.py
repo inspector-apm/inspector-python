@@ -1,14 +1,14 @@
 from __future__ import annotations
 from . import Configuration
-from src.inspector.models.enums import TransportType
-from src.inspector.models import Transaction, Segment, Error
-from src.inspector.models.enums import TransactionType, ModelType
+from .models.enums import TransportType
+from .models import Transaction, Segment, Error
+from .models.enums import TransactionType, ModelType
 import sys
 import traceback
 
 # import http.client
 # import multiprocessing
-from src.inspector.transports import SyncTransport, AsyncTransport
+from.transports import SyncTransport, AsyncTransport
 
 
 class Inspector:

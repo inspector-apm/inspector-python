@@ -1,6 +1,6 @@
-from src.inspector.models import Performance, Transaction
-from src.inspector.models.partials import HOST
-from src.inspector.models.enums import ModelType
+from . import Performance, Transaction
+from .partials import HOST
+from .enums import ModelType
 import sys
 import traceback
 

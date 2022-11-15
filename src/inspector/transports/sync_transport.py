@@ -1,5 +1,5 @@
-from src.inspector.transports import Transport
-from src.inspector import Configuration
+from . import Transport
+from .. import Configuration
 import http.client
 import ssl
 

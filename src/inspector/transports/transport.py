@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from src.inspector import Configuration
 from typing import Union
-from src.inspector.transports import TransportInterface
-from src.inspector.models import Transaction, Segment, Error
+from . import TransportInterface
+from ..models import Transaction, Segment, Error
 import tempfile
 import base64
 import math

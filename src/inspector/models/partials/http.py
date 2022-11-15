@@ -1,6 +1,5 @@
-from src.inspector.models import Arrayable
-from typing import Union
-from src.inspector.models.partials import URL
+from .. import Arrayable
+from . import URL
 
 class HTTP(Arrayable):
     request = None

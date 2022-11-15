@@ -1,6 +1,6 @@
-from src.inspector.models import Arrayable
+from .. import Arrayable
 from typing import Union
-from src.inspector.models.partials import Socket
+from ..partials import Socket
 
 
 class Request(Arrayable):

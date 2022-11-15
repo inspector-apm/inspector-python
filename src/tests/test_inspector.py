@@ -1,4 +1,4 @@
-from src.inspector import Configuration, Inspector
+from ..inspector import Configuration, Inspector
 import time
 import sys
 import traceback
