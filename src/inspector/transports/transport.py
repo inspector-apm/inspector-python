@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from src.inspector import Configuration
+from .. import Configuration
 from typing import Union
 from . import TransportInterface
 from ..models import Transaction, Segment, Error
