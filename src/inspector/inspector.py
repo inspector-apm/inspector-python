@@ -143,3 +143,5 @@ class Inspector:
         del self._transaction
         if self._segment is not None:
             del self._segment
+        if self._error is not None:
+            del self._error
