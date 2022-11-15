@@ -6,10 +6,29 @@ Inspector is a Code Execution Monitoring tool to help developers find out techni
 
 - Python >= 3.x
 
-## Abstract
-This library will allow Python developers to connect their applications to the Code Execution Monitoring tool Inspector.
+## Install
+Install the latest version of the package from PyPI:
 
-The development is in progress under the direct management of the Inspector team. This is not a community project.
+```shell
+pip install inspector-python
+```
+
+## Get a new Ingestion Key
+You need an Ingestion Key to create an instance of the Inspector class.  
+You can obtain a key creating a new project in your [Inspector dashboard](https://app.inspector.dev).
+
+## Initialization
+Here's a code example of how Inspector is normally initialized in a Python script:
+
+```python
+from inspector import Configuration, Inspector
+
+config = Configuration('xxxxxxxxxxxxxxxxxxx')
+
+inspector = Inspector(config)
+
+inspector.start_transaction('my python script')
+```
 
 ## License
 This library is licensed under the [MIT](LICENSE) license.
