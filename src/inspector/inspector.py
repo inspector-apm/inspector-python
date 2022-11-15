@@ -141,4 +141,5 @@ class Inspector:
         self.transaction().end()
         self._transport.flush()
         del self._transaction
-        del self._segment
+        if self._segment is not None:
+            del self._segment
