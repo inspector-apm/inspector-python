@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='inspector-python',
-    version='0.1.4',
+    version='0.1.5',
     description='Connect your Python applications with Inspector.',
     long_description='Inspector is a Code Execution Monitoring tool to help developers find out technical problems in their software automatically, before customers do.',
     author='Antonio Bruno',
