@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Union, Any
 from . import Performance
-from .partials import HOST, User, HTTP, URL
+from .partials import HOST, User, HTTP
 import random
 import string
 from .enums import TransactionType, ModelType

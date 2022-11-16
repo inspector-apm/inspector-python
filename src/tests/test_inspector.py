@@ -1,7 +1,4 @@
 from ..inspector import Configuration, Inspector
-import time
-import sys
-import traceback
 
 class Test:
 

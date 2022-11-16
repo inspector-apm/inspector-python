@@ -3,8 +3,6 @@ from . import Configuration
 from .models.enums import TransportType
 from .models import Transaction, Segment, Error
 from .models.enums import TransactionType, ModelType
-import sys
-import traceback
 
 # import http.client
 # import multiprocessing
@@ -38,7 +36,6 @@ class Inspector:
 
     def __init__(self, configuration: Configuration):
         self._configuration = configuration
-        print('configuration.get_transport(): ', configuration.get_transport())
         if configuration.get_transport() == TransportType.ASYNC.value:
             self._transport = AsyncTransport(configuration)
         else:

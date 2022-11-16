@@ -1,6 +1,6 @@
 from .. import Arrayable
 from typing import Union
-import psutil
+import resource
 import socket
 import platform
 
@@ -16,12 +16,12 @@ class HOST(Arrayable):
     def __init__(self):
         self.hostname = socket.gethostname()
         self.ip = socket.gethostbyname(socket.gethostname())
+        self.cpu = 0
         self.with_server_status()
         self.set_os(platform.version())
 
     def with_server_status(self):
-        self.set_cpu(psutil.cpu_percent())
-        ram = psutil.virtual_memory().percent
+        ram = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         self.set_ram(ram)
 
     def set_hostname(self, hostname: str) -> None:

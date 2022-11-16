@@ -1,5 +1,4 @@
 from __future__ import annotations
-from .models.enums import TransportType
 import platform
 from .models.enums import TransportType
 
