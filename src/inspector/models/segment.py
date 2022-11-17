@@ -19,6 +19,7 @@ class Segment(Performance):
         self.model = self.MODEL_NAME
         self.type = type
         self.label = label
+        self.context = {}
         self.transaction = transaction
         self.timestamp = self.get_microtime()
 
