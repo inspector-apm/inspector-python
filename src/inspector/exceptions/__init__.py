@@ -1,1 +1,1 @@
-from inspector_exception import InspectorException
+from .inspector_exception import InspectorException

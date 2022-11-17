@@ -96,7 +96,7 @@ class Inspector:
         self._configuration.set_enabled(False)
         return self
 
-    def start_segment(self, type_str=TransactionType.PROCESS.value, label=None):
+    def start_segment(self, type_str=TransactionType.PROCESS.value, label=None) -> Segment:
         self._segment = Segment(self._transaction, type_str, label)
         self._segment.start()
         self.add_entries(self._segment)
