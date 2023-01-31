@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='inspector-python',
-    version='0.1.12',
+    version='0.1.13',
     description='Real-time Code Execution Monitoring of Python applications.',
     long_description=long_description,
     long_description_content_type='text/markdown',
