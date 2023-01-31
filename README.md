@@ -1,6 +1,6 @@
 # Inspector | Code Execution Monitoring Tool
 
-Inspector is a Code Execution Monitoring tool to help developers find out technical problems in their software automatically, before customers do.
+Inspector is a Code Execution Monitoring tool to help developers find out technical problems in their application automatically, before customers do.
 
 ## Requirements
 
@@ -29,6 +29,9 @@ inspector = Inspector(config)
 
 inspector.start_transaction('my python script')
 ```
+
+## Official documentation
+Checkout our [official documentation](https://docs.inspector.dev/guides/python) for more detailed tutorial.
 
 ## License
 This library is licensed under the [MIT](LICENSE) license.
