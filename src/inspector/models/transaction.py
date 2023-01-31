@@ -17,8 +17,8 @@ class Transaction(Performance):
     model: Union[str, None] = None
     type: Union[str, None] = None
     hash: Union[str, None] = None
-    host: Union[str, None] = None
-    http: Union[str, None] = None
+    host: Union[str, HOST, None] = None
+    http: Union[str, HTTP, None] = None
     user: Union[str, None] = None
     result: Union[str, None] = None
     user: Union[User, None] = None
@@ -43,6 +43,14 @@ class Transaction(Performance):
         if self.type == self.TYPE_REQUEST:
             self.http = HTTP()
 
+    def set_host(self, host_data: HOST) -> Transaction:
+        self.host = host_data
+        return self
+
+    def set_http(self, http_data: HTTP) -> Transaction:
+        self.http = http_data
+        return self
+
     def add_context(self, label: Union[str, int], data: Any) -> Transaction:
         self.context[label] = data
         return self
@@ -62,7 +70,7 @@ class Transaction(Performance):
         return obj
 
     def get_memory_peak(self):
-        return round((resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024/1024), 2)
+        return round((resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024 / 1024), 2)
 
     def sample_server_status(self, ratio: float):
         pass
