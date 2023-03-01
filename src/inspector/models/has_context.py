@@ -51,4 +51,4 @@ class HasContext:
 
     def get_microtime(self):
         time_value = time.time() * 1000
-        return float(round(time_value, 0))
+        return float(round(time_value, 4))

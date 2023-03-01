@@ -25,7 +25,7 @@ class Segment(Performance):
 
     def start(self, timestamp=None) -> Performance:
         initial = self.get_microtime() if timestamp is None else timestamp
-        self.start = round((initial - self.transaction.timestamp) * 1000, 4)
+        self.start = round((initial - self.transaction.timestamp), 4)
         return self
 
     def add_context(self, label: Union[str, int], data: Any) -> Segment:
