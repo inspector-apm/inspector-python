@@ -31,3 +31,4 @@ class Segment(Performance):
     def add_context(self, label: Union[str, int], data: Any) -> Segment:
         self.context[label] = data
         return self
+
