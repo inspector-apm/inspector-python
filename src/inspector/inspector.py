@@ -108,13 +108,13 @@ class Inspector:
         self.segment().end()
         return result
 
-    def report_exception(self, exception, handled=True):
+    def report_exception(self, exception, handled=True, reverse_trace_back=False):
         if self.need_transaction():
             self.start_transaction(exception.__class__.__name__)
 
         segment = self.start_segment(ModelType.EXCEPTION.value, str(exception))
 
-        error = (Error(exception, self._transaction)).set_handled(handled)
+        error = (Error(exception, self._transaction, reverse_trace_back)).set_handled(handled)
         self.add_entries(error)
         segment.add_context('Error', error).end()
         return error

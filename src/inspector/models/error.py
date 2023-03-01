@@ -20,7 +20,7 @@ class Error(Performance):
     __prev_number_line = 5
     __next_number_line = 5
 
-    def __init__(self, throwable: Exception, transaction: Transaction):
+    def __init__(self, throwable: Exception, transaction: Transaction, reverse_trace_back=False):
         Performance.__init__(self)
         self.model = ModelType.ERROR.value
         self.timestamp = self.get_microtime()
@@ -31,6 +31,8 @@ class Error(Performance):
 
         ex_type, ex_value, ex_traceback = sys.exc_info()
         trace_back = traceback.extract_tb(ex_traceback)
+        if reverse_trace_back:
+            trace_back.reverse()
 
         self.class_name = throwable.__class__.__name__
         self.file = trace_back[0].filename
