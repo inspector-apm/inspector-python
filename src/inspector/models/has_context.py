@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Union, Any
 import json
-import time
 from abc import abstractmethod
 
 
@@ -48,7 +47,3 @@ class HasContext:
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)), indent=100)
         )
-
-    def get_microtime(self):
-        time_value = float(time.time())
-        return (round(time_value, 4))

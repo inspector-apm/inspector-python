@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import Union
 from . import HasContext
+import time
 
 
 class Performance(HasContext):
@@ -40,3 +41,7 @@ class Performance(HasContext):
 
     def get_duration(self):
         return self.duration
+
+    def get_microtime(self):
+        time_value = float(time.time())
+        return (round(time_value, 4))
