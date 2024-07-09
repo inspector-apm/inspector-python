@@ -26,7 +26,7 @@ class Configuration:
     _server_sampling_ratio = 0
 
     # type: str
-    _version = '3.7.16'
+    _version = '0.2.0'
 
     # type: list
     _options = []

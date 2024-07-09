@@ -59,6 +59,10 @@ class Transaction(Performance):
         self.user = User(id=id, name=name, email=email)
         return self
 
+    def set_type(self, type: str) -> Transaction:
+        self.type = type
+        return self
+
     def get_json(self) -> str:
         return json.loads(
             json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o)))
